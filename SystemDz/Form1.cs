@@ -37,7 +37,6 @@ namespace SystemDz
             Thread thread3 = new Thread(WhereNum7);
             thread1.Start();
             thread1.Join();
-
             thread2.Start();
             thread2.Join();
 
@@ -73,6 +72,8 @@ namespace SystemDz
 
         static void SimpleNum()
         {
+            mutex.WaitOne();
+
             // чтение из файла
             List<int> buffer;
             using (StreamReader reader = new StreamReader("Text.xml"))
@@ -86,14 +87,14 @@ namespace SystemDz
             {
                 if (buffer[i] > 1)
                 {
-                    for (int j = 2; j < buffer[i]; j++)
-                    {
-                        if (buffer[i] % 1 != 0)
-                        {
-                            temp.Add(buffer[i]);
-                        }
-                    }
+                    if ((buffer[i] * buffer[i]) % 24 == 1)
+                        temp.Add(buffer[i]);
+
+                    if (buffer[i] == 2 || buffer[i] == 3)
+                        temp.Add(buffer[i]);
                 }
+                else
+                    temp.Add(buffer[i]);
             }
             buffer.Clear();
             buffer = null;
@@ -105,10 +106,13 @@ namespace SystemDz
             }
             temp.Clear();
             temp = null;
+
+            mutex.ReleaseMutex();
         }
 
         static void WhereNum7()
         {
+            mutex.WaitOne();
             // чтение из файла
             List<int> buffer;
             using (StreamReader reader = new StreamReader("TextSimple.xml"))
@@ -121,12 +125,10 @@ namespace SystemDz
             // если число оканчивается на 7
             for (int i = 0; i < buffer.Count; i++)
             {
-                for (int j = 0; j < temp.Count; j++)
+                if ((buffer[i] % 10) == 7)
                 {
-                    if ((buffer[i] % 10) == 7)
-                    {
-                        temp.Add(buffer[i]);
-                    }
+                    temp.Add(buffer[i]);
+
                 }
             }
 
@@ -140,9 +142,11 @@ namespace SystemDz
             }
             temp.Clear();
             temp = null;
+
+            mutex.ReleaseMutex();
         }
 
-    private void lstBox1_SelectedIndexChanged(object sender, EventArgs e)
+        private void lstBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
 
         }
