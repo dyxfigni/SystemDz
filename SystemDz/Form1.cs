@@ -63,6 +63,10 @@ namespace SystemDz
         {
             btnStop.Enabled = false;
             btnStart.Enabled = true;
+
+            lstBox1.Items.Clear();
+            lstBox2.Items.Clear();
+            lstBox3.Items.Clear();
         }
 
         #region methods
@@ -222,10 +226,13 @@ namespace SystemDz
             //    xmlSerializer.Serialize(writer, FileLength);
             //}
 
-            MessageBox.Show($"First file: {NumberString[0].ToString()}\n" +
+            MessageBox.Show($"First file: amount is {NumberString[0].ToString()}\n" +
+                            $"        length in bytes is {FileLength[0].ToString()}\n\n" +
                             $"Second file: {NumberString[1].ToString()}\n" +
-                            $"Third file: {NumberString[2].ToString()}\n",
-                            "Amount of numbers");
+                            $"        length in bytes is {FileLength[1].ToString()}\n\n" +
+                            $"Third file: {NumberString[2].ToString()}\n" +
+                            $"        length in bytes is {FileLength[2].ToString()}",
+                            "Report from each file");
 
             path = null;
             temp.Clear();
