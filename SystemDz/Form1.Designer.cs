@@ -35,7 +35,6 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.btnStop = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
@@ -66,6 +65,7 @@
             this.lstBox2.Name = "lstBox2";
             this.lstBox2.Size = new System.Drawing.Size(201, 264);
             this.lstBox2.TabIndex = 3;
+            this.lstBox2.SelectedIndexChanged += new System.EventHandler(this.lstBox2_SelectedIndexChanged);
             // 
             // lstBox3
             // 
@@ -105,13 +105,6 @@
             this.label3.TabIndex = 7;
             this.label3.Text = "ThirdThreat";
             // 
-            // progressBar1
-            // 
-            this.progressBar1.Location = new System.Drawing.Point(12, 415);
-            this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(615, 23);
-            this.progressBar1.TabIndex = 8;
-            // 
             // btnStop
             // 
             this.btnStop.Font = new System.Drawing.Font("Arial Rounded MT Bold", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -127,9 +120,10 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScroll = true;
+            this.AutoSize = true;
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.Controls.Add(this.btnStop);
-            this.Controls.Add(this.progressBar1);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
@@ -154,7 +148,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.ProgressBar progressBar1;
         private System.Windows.Forms.Button btnStop;
     }
 }
