@@ -16,7 +16,6 @@ namespace SortingNumbersByEventsDz
 {
     public partial class Form1 : Form
     {
-        static AutoResetEvent myEvent = new AutoResetEvent(true);
         private static ManualResetEvent myResetEvent = new ManualResetEvent(false);
         private static Dictionary<int, int> pair = new Dictionary<int, int>();
         private static XmlSerializer xmlSerializer = new XmlSerializer(typeof(List<int>));
