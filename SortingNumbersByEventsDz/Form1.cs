@@ -49,6 +49,8 @@ namespace SortingNumbersByEventsDz
             FillMyListBox(lstBox2, "SumOfPairs.xml");
             FillMyListBox(lstBox3, "ProductOfPairs.xml");
 
+            btnStop.Enabled = true;
+            btnStart.Enabled = false;
         }
 
         static void GenNumForPairs()
@@ -149,6 +151,16 @@ namespace SortingNumbersByEventsDz
         private void Form1_Load(object sender, EventArgs e)
         {
 
+        }
+
+        private void btnStop_Click(object sender, EventArgs e)
+        {
+            btnStop.Enabled = false;
+            btnStart.Enabled = true;
+
+            lstBox1.Items.Clear();
+            lstBox2.Items.Clear();
+            lstBox3.Items.Clear();
         }
     }
 }
