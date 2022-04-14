@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SystemDz", "SystemDz\System
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SortingNumbersByEventsDz", "SortingNumbersByEventsDz\SortingNumbersByEventsDz.csproj", "{60E50FAA-9464-4EE4-A6AC-80168D18C516}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReportDirectoryAndStringByTasks", "ReportDirectoryAndStringByTasks\ReportDirectoryAndStringByTasks.csproj", "{AAC6977B-B848-4A66-A773-94E52BADD316}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{60E50FAA-9464-4EE4-A6AC-80168D18C516}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{60E50FAA-9464-4EE4-A6AC-80168D18C516}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{60E50FAA-9464-4EE4-A6AC-80168D18C516}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AAC6977B-B848-4A66-A773-94E52BADD316}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AAC6977B-B848-4A66-A773-94E52BADD316}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AAC6977B-B848-4A66-A773-94E52BADD316}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AAC6977B-B848-4A66-A773-94E52BADD316}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
