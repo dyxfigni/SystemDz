@@ -74,6 +74,7 @@
             this.lstBox3.Name = "lstBox3";
             this.lstBox3.Size = new System.Drawing.Size(201, 264);
             this.lstBox3.TabIndex = 4;
+            this.lstBox3.SelectedIndexChanged += new System.EventHandler(this.lstBox3_SelectedIndexChanged);
             // 
             // label1
             // 
@@ -84,6 +85,7 @@
             this.label1.Size = new System.Drawing.Size(180, 33);
             this.label1.TabIndex = 5;
             this.label1.Text = "First Threat";
+            this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
             // label2
             // 
@@ -94,6 +96,7 @@
             this.label2.Size = new System.Drawing.Size(222, 33);
             this.label2.TabIndex = 6;
             this.label2.Text = "Second Threat";
+            this.label2.Click += new System.EventHandler(this.label2_Click);
             // 
             // label3
             // 
@@ -104,6 +107,7 @@
             this.label3.Size = new System.Drawing.Size(183, 33);
             this.label3.TabIndex = 7;
             this.label3.Text = "ThirdThreat";
+            this.label3.Click += new System.EventHandler(this.label3_Click);
             // 
             // btnStop
             // 
