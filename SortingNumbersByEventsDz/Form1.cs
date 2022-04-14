@@ -6,8 +6,10 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows.Forms;
+using System.Xml.Linq;
 using System.Xml.Serialization;
 
 namespace SortingNumbersByEventsDz
@@ -15,7 +17,7 @@ namespace SortingNumbersByEventsDz
     public partial class Form1 : Form
     {
         static AutoResetEvent myEvent = new AutoResetEvent(true);
-        private static ManualResetEvent myResetEvent = new ManualResetEvent(true);
+        private static ManualResetEvent myResetEvent = new ManualResetEvent(false);
         private static Dictionary<int, int> pair = new Dictionary<int, int>();
         private static XmlSerializer xmlSerializer = new XmlSerializer(typeof(List<int>));
 
@@ -52,8 +54,6 @@ namespace SortingNumbersByEventsDz
 
         static void GenNumForPairs()
         {
-            myResetEvent.WaitOne();
-            myResetEvent.Reset();
             Random random = new Random();
 
             for (int i = 0; i < new Random().Next(50, 200); i++)
@@ -67,18 +67,25 @@ namespace SortingNumbersByEventsDz
                 pair.Add(key, random.Next(0, 1000));
             }
 
+            using (StreamWriter writer = new StreamWriter("Pairs.xml", false))
+            {
+                foreach (KeyValuePair<int, int> entry in pair)
+                    writer.WriteLine("[{0} {1}]", entry.Key, entry.Value);
+            }
+
             myResetEvent.Set();
         }
 
         static void GetSumInPairs()
         {
-            myResetEvent.WaitOne();
             myResetEvent.Reset();
+            myResetEvent.WaitOne();
+
             List<int> sumList = new List<int>();
 
-            foreach (KeyValuePair<int, int> keyValuePair in pair)
+            foreach (KeyValuePair<int, int> entry in pair)
             {
-                sumList.Add(keyValuePair.Key + keyValuePair.Value);
+                sumList.Add(entry.Key + entry.Value);
             }
 
             using (StreamWriter writer = new StreamWriter("SumOfPairs.xml", false))
@@ -93,13 +100,13 @@ namespace SortingNumbersByEventsDz
 
         static void GetProductInPairs()
         {
-            myResetEvent.WaitOne();
             myResetEvent.Reset();
+            myResetEvent.WaitOne();
             List<int> productsList = new List<int>();
 
-            foreach (KeyValuePair<int, int> keyValuePair in pair)
+            foreach (KeyValuePair<int, int> entry in pair)
             {
-                productsList.Add(keyValuePair.Value * keyValuePair.Key);
+                productsList.Add(entry.Value * entry.Key);
             }
 
             using (StreamWriter writer = new StreamWriter("ProductOfPairs.xml", false))
@@ -138,6 +145,11 @@ namespace SortingNumbersByEventsDz
             {
                 myListBox.Items.Add($"First: {keyValuePair.Key} Second: {keyValuePair.Value}");
             }
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }
