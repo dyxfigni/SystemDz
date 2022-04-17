@@ -17,9 +17,8 @@ namespace SortingNumbersByEventsDz
 {
     public partial class Form1 : Form
     {
-        private static ManualResetEvent myResetEvent = new ManualResetEvent(false);
-        private static Dictionary<int, int> pair = new Dictionary<int, int>();
-        private static XmlSerializer xmlSerializer = new XmlSerializer(typeof(List<int>));
+        private static ManualResetEvent _resetEvent = new ManualResetEvent(false);
+        private static XmlSerializer _xmlSerializer = new XmlSerializer(typeof(List<int>));
         public Form1()
         {
             InitializeComponent();
@@ -45,9 +44,9 @@ namespace SortingNumbersByEventsDz
 
             MessageBox.Show("Completed", "Message");
 
-            FillMyListBox(lstBox1);
-            FillMyListBox(lstBox2, "SumOfPairs.xml");
-            FillMyListBox(lstBox3, "ProductOfPairs.xml");
+            FillListBox(lstBox1);
+            FillListBox(lstBox2, "SumOfPairs.xml");
+            FillListBox(lstBox3, "ProductOfPairs.xml");
 
             btnStop.Enabled = true;
             btnStart.Enabled = false;
@@ -66,61 +65,78 @@ namespace SortingNumbersByEventsDz
 
         static void GenNumForPairs()
         {
+            Dictionary<int, int> pairDictionary = new Dictionary<int, int>();
             Random random = new Random();
 
             for (int i = 0; i < new Random().Next(50, 200); i++)
             {
                 int key = random.Next(0, 1000);
-                while (pair.ContainsKey(key)) {
+                while (pairDictionary.ContainsKey(key)) {
                     key = random.Next(0, 1000);
                 }
 
-                pair.Add(key, random.Next(0, 1000));
+                pairDictionary.Add(key, random.Next(0, 1000));
             }
 
             using (StreamWriter writer = new StreamWriter("Pairs.xml", false)) {
-                Serialize(writer, pair);
+                Serialize(writer, pairDictionary);
             }
-            myResetEvent.Set();
+            _resetEvent.Set();
         }
 
         static void GetSumInPairs()
         {
-            myResetEvent.Reset();
-            myResetEvent.WaitOne();
+            _resetEvent.Reset();
+            _resetEvent.WaitOne();
+            Dictionary<int, int> pairDictionary = new Dictionary<int, int>();
+
+            using (StreamReader reader = new StreamReader("Pairs.xml")) {
+                Deserialize(reader, pairDictionary);
+            }
 
             List<int> sumList = new List<int>();
-
-            foreach (KeyValuePair<int, int> entry in pair) {
+            foreach (KeyValuePair<int, int> entry in pairDictionary) {
                 sumList.Add(entry.Key + entry.Value);
             }
 
+            pairDictionary.Clear();
+            pairDictionary = null;
+
             using (StreamWriter writer = new StreamWriter("SumOfPairs.xml", false)) {
-                xmlSerializer.Serialize(writer, sumList);
+                _xmlSerializer.Serialize(writer, sumList);
             }
 
             sumList.Clear();
             sumList = null;
-            myResetEvent.Set();
+            _resetEvent.Set();
         }
 
         static void GetProductInPairs()
         {
-            myResetEvent.Reset();
-            myResetEvent.WaitOne();
-            List<int> productsList = new List<int>();
+            _resetEvent.Reset();
+            _resetEvent.WaitOne();
 
-            foreach (KeyValuePair<int, int> entry in pair){
+            Dictionary<int, int> pairDictionary = new Dictionary<int, int>();
+
+            using (StreamReader reader = new StreamReader("Pairs.xml")) {
+                Deserialize(reader, pairDictionary);
+            }
+
+            List<int> productsList = new List<int>();
+            foreach (KeyValuePair<int, int> entry in pairDictionary) {
                 productsList.Add(entry.Value * entry.Key);
             }
 
+            pairDictionary.Clear();
+            pairDictionary = null;
+
             using (StreamWriter writer = new StreamWriter("ProductOfPairs.xml", false)) {
-                xmlSerializer.Serialize(writer, productsList);
+                _xmlSerializer.Serialize(writer, productsList);
             }
 
             productsList.Clear();
             productsList = null;
-            myResetEvent.Set();
+            _resetEvent.Set();
         }
 
 
@@ -128,14 +144,14 @@ namespace SortingNumbersByEventsDz
 
         #region MethodsForFillingListBoxes
 
-        private void FillMyListBox(ListBox myListBox, string path)
+        private void FillListBox(ListBox myListBox, string path)
         {
             //Полная чистка перед добавлением элементов   
             myListBox.Items.Clear();
             List<int> temp = new List<int>();
             using (StreamReader reader = new StreamReader(path))
             {
-                temp = (List<int>)xmlSerializer.Deserialize(reader);
+                temp = (List<int>)_xmlSerializer.Deserialize(reader);
             }
 
             foreach (int number in temp)
@@ -146,16 +162,22 @@ namespace SortingNumbersByEventsDz
             temp.Clear();
             temp = null;
         }
-        private void FillMyListBox(ListBox myListBox)
+        private void FillListBox(ListBox myListBox)
         {
             //Полная чистка перед добавлением элементов   
             myListBox.Items.Clear();
-            foreach (KeyValuePair<int, int> keyValuePair in pair)
+
+            Dictionary<int, int> pairDictionary = new Dictionary<int, int>();
+            using (StreamReader reader = new StreamReader("Pairs.xml"))
+            {
+                Deserialize(reader, pairDictionary);
+            }
+
+            foreach (KeyValuePair<int, int> keyValuePair in pairDictionary)
             {
                 myListBox.Items.Add($"First: {keyValuePair.Key} Second: {keyValuePair.Value}");
             }
         }
-
 
         #endregion
         
