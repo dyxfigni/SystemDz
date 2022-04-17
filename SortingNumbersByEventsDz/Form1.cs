@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -19,7 +20,6 @@ namespace SortingNumbersByEventsDz
         private static ManualResetEvent myResetEvent = new ManualResetEvent(false);
         private static Dictionary<int, int> pair = new Dictionary<int, int>();
         private static XmlSerializer xmlSerializer = new XmlSerializer(typeof(List<int>));
-
         public Form1()
         {
             InitializeComponent();
@@ -52,6 +52,17 @@ namespace SortingNumbersByEventsDz
             btnStop.Enabled = true;
             btnStart.Enabled = false;
         }
+        private void btnStop_Click(object sender, EventArgs e)
+        {
+            btnStop.Enabled = false;
+            btnStart.Enabled = true;
+
+            lstBox1.Items.Clear();
+            lstBox2.Items.Clear();
+            lstBox3.Items.Clear();
+        }
+
+        #region MethodsForThreads
 
         static void GenNumForPairs()
         {
@@ -60,20 +71,16 @@ namespace SortingNumbersByEventsDz
             for (int i = 0; i < new Random().Next(50, 200); i++)
             {
                 int key = random.Next(0, 1000);
-                while(pair.ContainsKey(key))
-                {
+                while (pair.ContainsKey(key)) {
                     key = random.Next(0, 1000);
                 }
 
                 pair.Add(key, random.Next(0, 1000));
             }
 
-            using (StreamWriter writer = new StreamWriter("Pairs.xml", false))
-            {
-                foreach (KeyValuePair<int, int> entry in pair)
-                    writer.WriteLine("[{0} {1}]", entry.Key, entry.Value);
+            using (StreamWriter writer = new StreamWriter("Pairs.xml", false)) {
+                Serialize(writer, pair);
             }
-
             myResetEvent.Set();
         }
 
@@ -84,13 +91,11 @@ namespace SortingNumbersByEventsDz
 
             List<int> sumList = new List<int>();
 
-            foreach (KeyValuePair<int, int> entry in pair)
-            {
+            foreach (KeyValuePair<int, int> entry in pair) {
                 sumList.Add(entry.Key + entry.Value);
             }
 
-            using (StreamWriter writer = new StreamWriter("SumOfPairs.xml", false))
-            {
+            using (StreamWriter writer = new StreamWriter("SumOfPairs.xml", false)) {
                 xmlSerializer.Serialize(writer, sumList);
             }
 
@@ -105,13 +110,11 @@ namespace SortingNumbersByEventsDz
             myResetEvent.WaitOne();
             List<int> productsList = new List<int>();
 
-            foreach (KeyValuePair<int, int> entry in pair)
-            {
+            foreach (KeyValuePair<int, int> entry in pair){
                 productsList.Add(entry.Value * entry.Key);
             }
 
-            using (StreamWriter writer = new StreamWriter("ProductOfPairs.xml", false))
-            {
+            using (StreamWriter writer = new StreamWriter("ProductOfPairs.xml", false)) {
                 xmlSerializer.Serialize(writer, productsList);
             }
 
@@ -119,6 +122,11 @@ namespace SortingNumbersByEventsDz
             productsList = null;
             myResetEvent.Set();
         }
+
+
+        #endregion
+
+        #region MethodsForFillingListBoxes
 
         private void FillMyListBox(ListBox myListBox, string path)
         {
@@ -148,19 +156,51 @@ namespace SortingNumbersByEventsDz
             }
         }
 
+
+        #endregion
+        
+        public static void Serialize(TextWriter writer, IDictionary dictionary)
+        {
+            List<Entry> entries = new List<Entry>(dictionary.Count);
+            foreach (object key in dictionary.Keys)
+            {
+                entries.Add(new Entry(key, dictionary[key]));
+            }
+            XmlSerializer serializer = new XmlSerializer(typeof(List<Entry>));
+            serializer.Serialize(writer, entries);
+        }
+        public static void Deserialize(TextReader reader, IDictionary dictionary)
+        {
+            dictionary.Clear();
+            XmlSerializer serializer = new XmlSerializer(typeof(List<Entry>));
+            List<Entry> entries = (List<Entry>)serializer.Deserialize(reader);
+            foreach (Entry entry in entries)
+            {
+                dictionary[entry.Key] = entry.Value;
+            }
+        }
+
+        [Serializable]
+        public class Entry
+        {
+            public object Key;
+            public object Value;
+            public Entry()
+            {
+                this.Key = null;
+                this.Value = null;
+            }
+
+            public Entry(object key, object value)
+            {
+                Key = key;
+                Value = value;
+            }
+        }
+
         private void Form1_Load(object sender, EventArgs e)
         {
 
-        }
-
-        private void btnStop_Click(object sender, EventArgs e)
-        {
-            btnStop.Enabled = false;
-            btnStart.Enabled = true;
-
-            lstBox1.Items.Clear();
-            lstBox2.Items.Clear();
-            lstBox3.Items.Clear();
         }
     }
 }
