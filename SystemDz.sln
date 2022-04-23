@@ -15,6 +15,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyLibrary", "MyLibrary\MyLi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileSystem", "FileSystem\FileSystem.csproj", "{976AAE00-F9D5-4047-AA49-D1AC6D14B0EA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CensureFiles", "CensureFiles\CensureFiles.csproj", "{0B80A850-41A8-4174-B437-AA339C5A3878}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,10 @@ Global
 		{976AAE00-F9D5-4047-AA49-D1AC6D14B0EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{976AAE00-F9D5-4047-AA49-D1AC6D14B0EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{976AAE00-F9D5-4047-AA49-D1AC6D14B0EA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0B80A850-41A8-4174-B437-AA339C5A3878}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0B80A850-41A8-4174-B437-AA339C5A3878}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0B80A850-41A8-4174-B437-AA339C5A3878}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0B80A850-41A8-4174-B437-AA339C5A3878}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

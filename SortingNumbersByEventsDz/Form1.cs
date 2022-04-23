@@ -37,7 +37,6 @@ namespace SortingNumbersByEventsDz
             Thread thread2 = new Thread(GetSumInPairs);
             Thread thread3 = new Thread(GetProductInPairs);
 
-
             thread1.Start();
             thread2.Start();
             thread3.Start();
