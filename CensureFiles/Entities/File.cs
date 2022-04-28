@@ -1,4 +1,5 @@
-﻿using System.Xml.Serialization;
+﻿using System;
+using System.Xml.Serialization;
 
 namespace CensureFiles.Entities
 {
@@ -9,6 +10,12 @@ namespace CensureFiles.Entities
 
         [XmlAttribute("Extension")]
         public string Extension { get; set; }
+
+        [XmlAttribute("LengthInMB")]
+        public long Length { get; set; }
+
+        //[XmlAttribute("NumberOfReplaces")]
+        //public int Number { get; set; }
 
         [XmlIgnore]
         public string FullName => Name + Extension;

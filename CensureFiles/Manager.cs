@@ -33,11 +33,13 @@ namespace CensureFiles
             root.ReadAllChildren();
         }
 
-        public bool ReadFromFile(string path) {
+        public bool ReadFromFile(string path) 
+        {
             try 
             {
                 XmlSerializer serializer = new XmlSerializer(typeof(Catalog));
-                using (var reader = new XmlTextReader(path)){
+                using (var reader = new XmlTextReader(path))
+                {
                     root = (Catalog)serializer.Deserialize(reader);
                 }
             }
@@ -50,18 +52,22 @@ namespace CensureFiles
         public bool SaveToFile(string path)
         {
             XmlSerializer serializer = new XmlSerializer(typeof(Catalog));
-            try {
-                using (StreamWriter writer = new StreamWriter(path)) {
+            try 
+            {
+                using (StreamWriter writer = new StreamWriter(path)) 
+                {
                     serializer.Serialize(writer, root);
                 }   
             }
-            catch (Exception) {
+            catch (Exception) 
+            {
                 return false; 
             }
             return true;
         }
 
-        public void print() {
+        public void print() 
+        {
             root.print();
         }
     }

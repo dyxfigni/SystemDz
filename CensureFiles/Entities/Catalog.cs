@@ -4,13 +4,15 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace CensureFiles.Entities
 {
-
     public class Catalog
     {
         public string path { get; set; }
+
+        object locker = null;  // объект-заглушка
 
         public List<File> Files { get; set; } = new List<File>();
 
@@ -29,7 +31,7 @@ namespace CensureFiles.Entities
         public Catalog() { }
 
 
-        public void ReadAllChildren(Catalog Curr = null)
+        public async Task ReadAllChildren(Catalog Curr = null)
         {
             if (Curr == null){
                 Curr = this;
@@ -64,54 +66,66 @@ namespace CensureFiles.Entities
                     File file = new File()
                     {
                         Name = Path.GetFileNameWithoutExtension(item),
-                        Extension = Path.GetExtension(item)
+                        Extension = Path.GetExtension(item),
+                        Length = new System.IO.FileInfo(item).Length
                     };
                     Curr.Files.Add(file);
-
                     if (file.Extension == ".txt")
                     {
-                        ReplaceInFile(item, "*******");
+                        await ReplaceInFile(item, "*******");
                     }
                 }
             }
         }
 
-        public void ReplaceInFile(string filePath, string replaceText)
+        public async Task ReplaceInFile(string filePath, string replaceText)
         {
-            if (SearchText == null) 
-                return;
-
-            StringBuilder targetPath = new StringBuilder(@"E:\test\Replaced files");
-            StringBuilder sourcePath = new StringBuilder(Path.GetDirectoryName(filePath));
-            StringBuilder sourceFile = new StringBuilder(System.IO.Path.Combine(sourcePath.ToString(),
-                filePath));
-            StringBuilder destFile = new StringBuilder(System.IO.Path.Combine(targetPath.ToString(), 
-                Path.GetFileName(filePath)));
-
-            sourcePath.Clear();
-            targetPath.Clear();
-
-            string content;
-
-            using (StreamReader reader = new StreamReader(sourceFile.ToString()))
+            await Task.Run(() =>
             {
-                 content = reader.ReadToEnd();
-            }
+                lock (this)
+                {
+                    if (SearchText == null)
+                        return;
 
-            if (content.Contains(SearchText))
-                System.IO.File.Copy(sourceFile.ToString(), destFile.ToString(), true);
-            else
-                return;
+                    StringBuilder targetPath = new StringBuilder(@"E:\test\Replaced files");
+                    StringBuilder sourcePath = new StringBuilder(Path.GetDirectoryName(filePath));
 
-            content = Regex.Replace(content, SearchText, replaceText);
+                    if (targetPath.Equals(sourcePath))
+                        return;
 
-            using (StreamWriter writer = new StreamWriter(destFile.ToString()))
-            {
-                writer.Write(content);
-            }
+                    StringBuilder sourceFile = new StringBuilder(System.IO.Path.Combine(sourcePath.ToString(),
+                        filePath));
+                    StringBuilder destFile = new StringBuilder(System.IO.Path.Combine(targetPath.ToString(),
+                        Path.GetFileName(filePath)));
 
-            sourceFile.Clear();
-            destFile.Clear();
+                    sourcePath.Clear();
+                    targetPath.Clear();
+
+                    string content;
+
+                    using (StreamReader reader = new StreamReader(sourceFile.ToString()))
+                    {
+                        content = reader.ReadToEnd();
+                    }
+
+                    if (content.Contains(SearchText))
+                    {
+                        System.IO.File.Copy(sourceFile.ToString(), destFile.ToString(), true);
+                    }
+                    else
+                        return;
+
+                    content = Regex.Replace(content, SearchText, replaceText);
+
+                    using (StreamWriter writer = new StreamWriter(destFile.ToString()))
+                    {
+                        writer.Write(content);
+                    }
+                    
+                    sourceFile.Clear();
+                    destFile.Clear();
+                }
+            });
         }
 
         public void print(Catalog path = null, string pref = " ")
