@@ -25,16 +25,16 @@ namespace CensureFiles
             InitializeComponent();
         }
 
-        private async void btnStart_Click(object sender, EventArgs e)
-        { 
+        private void btnStart_Click(object sender, EventArgs e)
+        {
             thread = new Thread((() =>
             {
                 if (ed2Path.Text == null)
-                    ed2Path.Text = "E:\\test";
+                    ed2Path.Text = "D:\\test\\FileDetector";
                 if (edText.Text == null)
                     edText.Text = "Blabla";
 
-                Manager manager = new Manager(@"E:\test", edText.Text);
+                Manager manager = new Manager(@"D:\test\FileDetector", edText.Text);
                 manager.ReadChildren();
 
                 Stopwatch stopwatch = Stopwatch.StartNew();
@@ -55,7 +55,7 @@ namespace CensureFiles
 
                 stopwatch.Stop();
 
-                manager.SaveToFile(@"E:\test\TestResults.xml");
+                manager.SaveToFile(@"D:\test\FileDetector\TestResults.xml");
             }));
 
             thread.Start();

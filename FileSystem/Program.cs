@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace FileSystem
 {
@@ -11,7 +12,7 @@ namespace FileSystem
     {
         static void Main(string[] args)
         {
-            string rootpath = @"E:\test";
+            string rootpath = @"D:\test\FileDetector\";
 
             //string[] dirs = Directory.GetDirectories(rootpath, "*",
             //    SearchOption.AllDirectories);
@@ -38,7 +39,7 @@ namespace FileSystem
             //}
 
             string[] files = Directory.GetFiles(rootpath);
-            string distinationFolder = @"E:\test\SubFolderA";
+            string distinationFolder = @"D:\test\FileDetector\SubFolderA";
 
             //foreach (string file in files)
             //{

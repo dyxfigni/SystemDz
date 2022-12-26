@@ -18,19 +18,30 @@ namespace CensureFiles.Entities
 
         public List<Catalog> Catalogs { get; set; } = new List<Catalog>(); 
         public string SearchText { get; set; }
-
         public Catalog(string path)
         {
-
             if (Directory.Exists(path))
+            {
                 this.path = path;
+                this.SearchText = null;
+            }
+            else
+                throw new Exception("Invalid argument");
+        }
+        public Catalog(string path, string searchText)
+        {
+            if (Directory.Exists(path))
+            {
+                this.path = path;
+                this.SearchText= searchText;
+            }
             else
                 throw new Exception("Invalid argument");
         }
 
         public Catalog() { }
 
-
+        //
         public async Task ReadAllChildren(Catalog Curr = null)
         {
             if (Curr == null){
@@ -52,9 +63,9 @@ namespace CensureFiles.Entities
                 {
                     if (Directory.Exists(catalog))
                     {
-                        Catalog newDir = new Catalog(catalog);
+                        Catalog newDir = new Catalog(catalog, SearchText);
                         Curr.Catalogs.Add(newDir);
-                        ReadAllChildren(newDir);
+                        await ReadAllChildren(newDir);
                     }
                 }
             }
@@ -72,22 +83,24 @@ namespace CensureFiles.Entities
                     Curr.Files.Add(file);
                     if (file.Extension == ".txt")
                     {
-                        await ReplaceInFile(item, "*******");
+                        await ReplaceInFile(item, "*******", SearchText);
                     }
                 }
             }
         }
 
-        public async Task ReplaceInFile(string filePath, string replaceText)
+
+        public async Task ReplaceInFile(string filePath, string replaceText, string searchText)
         {
+            //creating a new task for replacing documents with these banned words
             await Task.Run(() =>
             {
                 lock (this)
                 {
-                    if (SearchText == null)
+                    if (searchText == null)
                         return;
 
-                    StringBuilder targetPath = new StringBuilder(@"E:\test\Replaced files");
+                    StringBuilder targetPath = new StringBuilder(@"D:\test\FileDetector\Replaced files");
                     StringBuilder sourcePath = new StringBuilder(Path.GetDirectoryName(filePath));
 
                     if (targetPath.Equals(sourcePath))
@@ -128,7 +141,7 @@ namespace CensureFiles.Entities
             });
         }
 
-        public void print(Catalog path = null, string pref = " ")
+        public void Print(Catalog path = null, string pref = " ")
         {
             if (path == null) path = this;
 
@@ -137,14 +150,13 @@ namespace CensureFiles.Entities
                 try
                 {
                     Console.WriteLine(pref + (item.path));
-                    print(item, pref + "\t");
+                    Print(item, pref + "\t");
                 }
                 catch { }
             }
 
             foreach (var file in path.Files)
                 Console.WriteLine(pref + file.Name + file.Extension);
-
         }
     }
 }

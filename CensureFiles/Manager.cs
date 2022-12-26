@@ -22,15 +22,14 @@ namespace CensureFiles
         {
             if (Directory.Exists(path))
             {
-                root = new Catalog(path);
-                root.SearchText = searchText;
+                root = new Catalog(path, searchText);
             }
             else
                 throw new Exception("Invalid argument");
         }
 
         public void ReadChildren() {
-            root.ReadAllChildren();
+            _= root.ReadAllChildren();
         }
 
         public bool ReadFromFile(string path) 
@@ -66,9 +65,9 @@ namespace CensureFiles
             return true;
         }
 
-        public void print() 
+        public void Print() 
         {
-            root.print();
+            root.Print();
         }
     }
 }
